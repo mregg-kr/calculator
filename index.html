@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Glassmorphic Calculator</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+    <!-- Ambient Neon Glowing Orbs -->
+    <div class="glow-orb orb-purple"></div>
+    <div class="glow-orb orb-teal"></div>
+    <div class="glow-orb orb-pink"></div>
+
+    <div class="app-container">
+        <!-- Control Header -->
+        <header class="app-header">
+            <div class="brand">
+                <i class="ph ph-sparkle-bold logo-icon"></i>
+                <h1>SMART<span>.calc</span></h1>
+            </div>
+            <div class="controls">
+                <!-- Sound Toggle -->
+                <button id="sound-btn" class="control-btn" title="사운드 효과 토글">
+                    <i class="ph ph-speaker-high"></i>
+                </button>
+                <!-- Theme Toggle -->
+                <button id="theme-btn" class="control-btn" title="테마 전환">
+                    <i class="ph ph-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Glassmorphic Card -->
+        <main class="calculator-card">
+            <!-- Tabs Navigation -->
+            <div class="card-tabs">
+                <button class="tab-btn active" data-tab="standard">
+                    <i class="ph ph-calculator"></i> 일반 계산기
+                </button>
+                <button class="tab-btn" data-tab="loan">
+                    <i class="ph ph-hand-coins"></i> 대출 이자 계산기
+                </button>
+            </div>
+
+            <!-- Tab Content: Standard Calculator -->
+            <div class="tab-content active" id="standard-tab">
+                <div class="calc-screen">
+                    <div class="calc-equation" id="equation-display"></div>
+                    <div class="calc-display" id="main-display">0</div>
+                </div>
+                <div class="calc-grid">
+                    <!-- Row 1 -->
+                    <button class="calc-btn op-btn clear-btn" id="btn-clear">AC</button>
+                    <button class="calc-btn op-btn" data-val="backspace"><i class="ph ph-backspace"></i></button>
+                    <button class="calc-btn op-btn" data-val="%">%</button>
+                    <button class="calc-btn action-btn" data-val="/">÷</button>
+                    
+                    <!-- Row 2 -->
+                    <button class="calc-btn num-btn" data-val="7">7</button>
+                    <button class="calc-btn num-btn" data-val="8">8</button>
+                    <button class="calc-btn num-btn" data-val="9">9</button>
+                    <button class="calc-btn action-btn" data-val="*">×</button>
+                    
+                    <!-- Row 3 -->
+                    <button class="calc-btn num-btn" data-val="4">4</button>
+                    <button class="calc-btn num-btn" data-val="5">5</button>
+                    <button class="calc-btn num-btn" data-val="6">6</button>
+                    <button class="calc-btn action-btn" data-val="-">−</button>
+                    
+                    <!-- Row 4 -->
+                    <button class="calc-btn num-btn" data-val="1">1</button>
+                    <button class="calc-btn num-btn" data-val="2">2</button>
+                    <button class="calc-btn num-btn" data-val="3">3</button>
+                    <button class="calc-btn action-btn" data-val="+">+</button>
+                    
+                    <!-- Row 5 -->
+                    <button class="calc-btn num-btn zero-btn" data-val="0">0</button>
+                    <button class="calc-btn num-btn" data-val=".">.</button>
+                    <button class="calc-btn equals-btn" id="btn-equals">=</button>
+                </div>
+            </div>
+
+            <!-- Tab Content: Loan Calculator -->
+            <div class="tab-content" id="loan-tab">
+                <div class="loan-container">
+                    <!-- Interactive Sliders -->
+                    <div class="loan-inputs">
+                        <!-- Principal Slider -->
+                        <div class="input-group">
+                            <div class="input-header">
+                                <label for="loan-principal">대출 원금 (Principal)</label>
+                                <span class="input-value" id="principal-val">1,000 만원</span>
+                            </div>
+                            <div class="slider-wrapper">
+                                <input type="range" id="loan-principal" min="100" max="10000" step="100" value="1000">
+                                <div class="slider-track-fill" id="principal-fill"></div>
+                            </div>
+                            <div class="input-limits">
+                                <span>100만원</span>
+                                <span>1억원</span>
+                            </div>
+                        </div>
+
+                        <!-- Interest Rate Slider -->
+                        <div class="input-group">
+                            <div class="input-header">
+                                <label for="loan-rate">연이율 (Annual Rate)</label>
+                                <span class="input-value" id="rate-val">3.5%</span>
+                            </div>
+                            <div class="slider-wrapper">
+                                <input type="range" id="loan-rate" min="1" max="15" step="0.1" value="3.5">
+                                <div class="slider-track-fill" id="rate-fill"></div>
+                            </div>
+                            <div class="input-limits">
+                                <span>1.0%</span>
+                                <span>15.0%</span>
+                            </div>
+                        </div>
+
+                        <!-- Term Slider -->
+                        <div class="input-group">
+                            <div class="input-header">
+                                <label for="loan-term">대출 기간 (Term)</label>
+                                <span class="input-value" id="term-val">24 개월</span>
+                            </div>
+                            <div class="slider-wrapper">
+                                <input type="range" id="loan-term" min="12" max="60" step="12" value="24">
+                                <div class="slider-track-fill" id="term-fill"></div>
+                            </div>
+                            <div class="input-limits">
+                                <span>12개월</span>
+                                <span>60개월</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Proportional Split Indicator -->
+                    <div class="proportional-split">
+                        <div class="split-bar-container">
+                            <div class="split-bar bar-principal" id="split-principal" style="width: 80%;"></div>
+                            <div class="split-bar bar-interest" id="split-interest" style="width: 20%;"></div>
+                        </div>
+                        <div class="split-labels">
+                            <div class="split-label">
+                                <span class="legend-color color-principal"></span>
+                                <span class="legend-text">대출 원금: <strong id="ratio-principal">80%</strong></span>
+                            </div>
+                            <div class="split-label">
+                                <span class="legend-color color-interest"></span>
+                                <span class="legend-text">총 대출 이자: <strong id="ratio-interest">20%</strong></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Financial Summary Dashboard -->
+                    <div class="loan-summary">
+                        <div class="summary-card repayment-card">
+                            <i class="ph ph-calendar-check summary-icon"></i>
+                            <div class="summary-info">
+                                <span class="summary-label">월별 상환 원리금</span>
+                                <span class="summary-value" id="monthly-payment-val">0 원</span>
+                            </div>
+                        </div>
+
+                        <div class="summary-details">
+                            <div class="summary-sub-card">
+                                <span class="summary-sub-label">총 대출 이자</span>
+                                <span class="summary-sub-value color-accent-interest" id="total-interest-val">0 원</span>
+                            </div>
+                            <div class="summary-sub-card">
+                                <span class="summary-sub-label">총 상환 금액</span>
+                                <span class="summary-sub-value" id="total-repayment-val">0 원</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Background Particle Canvas (for Equals visual effect) -->
+    <canvas id="particle-canvas"></canvas>
+
+    <script src="script.js"></script>
+</body>
+</html>

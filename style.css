@@ -1,0 +1,819 @@
+/* ==========================================================================
+   1. Design System & CSS Variables
+   ========================================================================== */
+:root {
+    /* Fonts */
+    --font-outfit: 'Outfit', sans-serif;
+    --font-code: 'Fira Code', monospace;
+
+    /* Theme-specific Colors (Default Dark) */
+    --bg-gradient: radial-gradient(circle at 50% 50%, #11111c 0%, #05050a 100%);
+    --card-bg: rgba(20, 20, 35, 0.45);
+    --card-border: 1px solid rgba(255, 255, 255, 0.08);
+    --card-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+    
+    --text-primary: #ffffff;
+    --text-secondary: #9ea4c0;
+    
+    --screen-bg: rgba(0, 0, 0, 0.35);
+    --screen-border: 1px solid rgba(255, 255, 255, 0.03);
+    
+    --btn-num-bg: rgba(255, 255, 255, 0.03);
+    --btn-num-border: 1px solid rgba(255, 255, 255, 0.04);
+    --btn-num-text: #ffffff;
+    --btn-num-hover: rgba(255, 255, 255, 0.08);
+    
+    --btn-op-bg: rgba(142, 74, 252, 0.1);
+    --btn-op-border: 1px solid rgba(142, 74, 252, 0.2);
+    --btn-op-text: #b088ff;
+    --btn-op-hover: rgba(142, 74, 252, 0.2);
+    
+    --btn-action-bg: rgba(255, 46, 147, 0.1);
+    --btn-action-border: 1px solid rgba(255, 46, 147, 0.2);
+    --btn-action-text: #ff68b4;
+    --btn-action-hover: rgba(255, 46, 147, 0.2);
+    
+    --btn-equals-bg: linear-gradient(135deg, #ff2e93 0%, #a855f7 100%);
+    --btn-equals-shadow: 0 8px 24px rgba(255, 46, 147, 0.4);
+    
+    --slider-thumb: #a855f7;
+    --slider-track: rgba(255, 255, 255, 0.08);
+    
+    --summary-card-bg: rgba(255, 255, 255, 0.02);
+    --summary-card-border: 1px solid rgba(255, 255, 255, 0.04);
+
+    --color-principal: #ff2e93;
+    --color-interest: #a855f7;
+    
+    /* Global Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Light Theme Variables */
+body.light-theme {
+    --bg-gradient: radial-gradient(circle at 50% 50%, #f6f3fc 0%, #e3def2 100%);
+    --card-bg: rgba(255, 255, 255, 0.4);
+    --card-border: 1px solid rgba(255, 255, 255, 0.5);
+    --card-shadow: 0 30px 60px rgba(112, 92, 168, 0.15);
+    
+    --text-primary: #1e1e2d;
+    --text-secondary: #6e6e8a;
+    
+    --screen-bg: rgba(255, 255, 255, 0.5);
+    --screen-border: 1px solid rgba(255, 255, 255, 0.6);
+    
+    --btn-num-bg: rgba(255, 255, 255, 0.6);
+    --btn-num-border: 1px solid rgba(255, 255, 255, 0.8);
+    --btn-num-text: #1e1e2d;
+    --btn-num-hover: rgba(255, 255, 255, 0.9);
+    
+    --btn-op-bg: rgba(142, 74, 252, 0.08);
+    --btn-op-border: 1px solid rgba(142, 74, 252, 0.15);
+    --btn-op-text: #8e4afc;
+    --btn-op-hover: rgba(142, 74, 252, 0.15);
+    
+    --btn-action-bg: rgba(255, 46, 147, 0.08);
+    --btn-action-border: 1px solid rgba(255, 46, 147, 0.15);
+    --btn-action-text: #d61b7c;
+    --btn-action-hover: rgba(255, 46, 147, 0.15);
+    
+    --btn-equals-bg: linear-gradient(135deg, #ff2e93 0%, #8e4afc 100%);
+    --btn-equals-shadow: 0 8px 20px rgba(142, 74, 252, 0.3);
+    
+    --slider-thumb: #8e4afc;
+    --slider-track: rgba(0, 0, 0, 0.06);
+    
+    --summary-card-bg: rgba(255, 255, 255, 0.3);
+    --summary-card-border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* ==========================================================================
+   2. Reset & Structure
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg-gradient);
+    font-family: var(--font-outfit);
+    color: var(--text-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    position: relative;
+    transition: background 0.5s ease;
+}
+
+/* Canvas overlay for particle action */
+#particle-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 440px;
+    padding: 20px;
+    z-index: 2;
+    position: relative;
+}
+
+/* ==========================================================================
+   3. Ambient Neon Orbs Animation
+   ========================================================================== */
+.glow-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.55;
+    mix-blend-mode: screen;
+}
+
+body.light-theme .glow-orb {
+    mix-blend-mode: multiply;
+    opacity: 0.3;
+    filter: blur(100px);
+}
+
+.orb-purple {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, #8e4afc 0%, transparent 70%);
+    top: -50px;
+    left: -100px;
+    animation: float-slow 18s infinite alternate;
+}
+
+.orb-teal {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, #00f2fe 0%, transparent 70%);
+    bottom: -100px;
+    right: -100px;
+    animation: float-medium 22s infinite alternate;
+}
+
+.orb-pink {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, #ff2e93 0%, transparent 70%);
+    top: 35%;
+    left: 45%;
+    animation: float-fast 14s infinite alternate;
+}
+
+@keyframes float-slow {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(120px, 80px) scale(1.2); }
+}
+
+@keyframes float-medium {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(-100px, -120px) scale(0.95); }
+}
+
+@keyframes float-fast {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(-60px, 50px) scale(1.1); }
+}
+
+/* ==========================================================================
+   4. Header & Branding
+   ========================================================================== */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 10px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo-icon {
+    font-size: 1.6rem;
+    color: #ff2e93;
+    filter: drop-shadow(0 0 8px rgba(255, 46, 147, 0.6));
+    animation: pulse-glow 2s infinite alternate;
+}
+
+@keyframes pulse-glow {
+    0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(255, 46, 147, 0.5)); }
+    100% { transform: scale(1.08); filter: drop-shadow(0 0 15px rgba(255, 46, 147, 0.9)); }
+}
+
+.brand h1 {
+    font-size: 1.3rem;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    color: var(--text-primary);
+}
+
+.brand h1 span {
+    color: var(--slider-thumb);
+    font-weight: 300;
+}
+
+.controls {
+    display: flex;
+    gap: 12px;
+}
+
+.control-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+body.light-theme .control-btn {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    color: var(--text-primary);
+}
+
+.control-btn:hover {
+    transform: scale(1.08);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+body.light-theme .control-btn:hover {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 12px rgba(112,92,168,0.1);
+}
+
+.control-btn:active {
+    transform: scale(0.94);
+}
+
+/* ==========================================================================
+   5. Calculator Main Card
+   ========================================================================== */
+.calculator-card {
+    background: var(--card-bg);
+    border: var(--card-border);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    box-shadow: var(--card-shadow);
+    border-radius: 24px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Tabs Navigation */
+.card-tabs {
+    display: flex;
+    background: rgba(0, 0, 0, 0.18);
+    padding: 6px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.02);
+}
+
+body.light-theme .card-tabs {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.tab-btn {
+    flex: 1;
+    border: none;
+    background: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition-smooth);
+}
+
+.tab-btn.active {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-primary);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+body.light-theme .tab-btn.active {
+    background: var(--btn-num-bg);
+    color: var(--text-primary);
+    box-shadow: 0 4px 12px rgba(112,92,168,0.08);
+}
+
+.tab-btn:hover {
+    color: var(--text-primary);
+}
+
+/* Tab Content Visibility */
+.tab-content {
+    display: none;
+    flex-direction: column;
+    gap: 20px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.tab-content.active {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ==========================================================================
+   6. Standard Calculator Pane
+   ========================================================================== */
+/* Display Screen */
+.calc-screen {
+    background: var(--screen-bg);
+    border: var(--screen-border);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    min-height: 110px;
+    position: relative;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.calc-equation {
+    font-family: var(--font-code);
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    min-height: 20px;
+    word-break: break-all;
+    text-align: right;
+    max-width: 100%;
+}
+
+.calc-display {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    word-break: break-all;
+    text-align: right;
+    max-width: 100%;
+    margin-top: 5px;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+    overflow-x: hidden;
+}
+
+/* Grid layout */
+.calc-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+/* Button general style */
+.calc-btn {
+    height: 64px;
+    border-radius: 16px;
+    border: none;
+    font-family: var(--font-outfit);
+    font-size: 1.35rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--transition-bounce);
+    position: relative;
+    overflow: hidden;
+}
+
+.calc-btn:active {
+    transform: scale(0.93);
+}
+
+/* Number Button style */
+.num-btn {
+    background: var(--btn-num-bg);
+    border: var(--btn-num-border);
+    color: var(--btn-num-text);
+}
+
+.num-btn:hover {
+    background: var(--btn-num-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255,255,255,0.03);
+}
+
+body.light-theme .num-btn:hover {
+    box-shadow: 0 4px 12px rgba(112,92,168,0.08);
+}
+
+.zero-btn {
+    grid-column: span 2;
+}
+
+/* Operator Button style */
+.op-btn {
+    background: var(--btn-op-bg);
+    border: var(--btn-op-border);
+    color: var(--btn-op-text);
+}
+
+.op-btn:hover {
+    background: var(--btn-op-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(142, 74, 252, 0.15);
+}
+
+/* Action Operator buttons */
+.action-btn {
+    background: var(--btn-action-bg);
+    border: var(--btn-action-border);
+    color: var(--btn-action-text);
+    font-size: 1.5rem;
+}
+
+.action-btn:hover {
+    background: var(--btn-action-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 46, 147, 0.15);
+}
+
+/* Equals Button style */
+.equals-btn {
+    background: var(--btn-equals-bg);
+    color: #ffffff;
+    box-shadow: var(--btn-equals-shadow);
+    font-size: 1.6rem;
+}
+
+.equals-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 28px rgba(255, 46, 147, 0.6);
+}
+
+.equals-btn:active {
+    transform: scale(0.94);
+}
+
+/* Ripple effect container */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(0);
+    animation: ripple-animation 0.5s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple-animation {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* ==========================================================================
+   7. Loan Calculator Pane
+   ========================================================================== */
+.loan-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Slider Input Groups */
+.loan-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.input-group {
+    background: rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.02);
+    padding: 14px 16px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+body.light-theme .input-group {
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.input-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.input-header label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.input-value {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Custom Styled Range Sliders */
+.slider-wrapper {
+    position: relative;
+    width: 100%;
+    height: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.slider-wrapper input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 100%;
+    background: var(--slider-track);
+    border-radius: 4px;
+    outline: none;
+    position: absolute;
+    z-index: 2;
+    cursor: pointer;
+}
+
+/* Chrome Track & Thumb styles */
+.slider-wrapper input[type="range"]::-webkit-slider-runnable-track {
+    background: transparent;
+}
+
+.slider-wrapper input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 3px solid var(--slider-thumb);
+    box-shadow: 0 0 10px rgba(142, 74, 252, 0.5);
+    cursor: pointer;
+    transition: var(--transition-bounce);
+}
+
+.slider-wrapper input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.22);
+    box-shadow: 0 0 15px var(--slider-thumb);
+}
+
+/* Firefox Track & Thumb styles */
+.slider-wrapper input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 3px solid var(--slider-thumb);
+    box-shadow: 0 0 10px rgba(142, 74, 252, 0.5);
+    cursor: pointer;
+    transition: var(--transition-bounce);
+}
+
+.slider-wrapper input[type="range"]::-moz-range-thumb:hover {
+    transform: scale(1.22);
+    box-shadow: 0 0 15px var(--slider-thumb);
+}
+
+/* Active slider fill */
+.slider-track-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(to right, #ff2e93, var(--slider-thumb));
+    z-index: 1;
+    pointer-events: none;
+}
+
+.input-limits {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   8. Visual Proportional Split Indicator
+   ========================================================================== */
+.proportional-split {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 5px;
+}
+
+.split-bar-container {
+    width: 100%;
+    height: 12px;
+    border-radius: 6px;
+    background: var(--slider-track);
+    overflow: hidden;
+    display: flex;
+}
+
+.split-bar {
+    height: 100%;
+    transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.bar-principal {
+    background: linear-gradient(to right, #ff2e93, #d61b7c);
+    box-shadow: 0 0 8px rgba(255, 46, 147, 0.4);
+}
+
+.bar-interest {
+    background: linear-gradient(to right, #a855f7, #8e4afc);
+    box-shadow: 0 0 8px rgba(142, 74, 252, 0.4);
+}
+
+.split-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.76rem;
+}
+
+.split-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legend-color {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.color-principal { background-color: var(--color-principal); }
+.color-interest { background-color: var(--color-interest); }
+
+.legend-text {
+    color: var(--text-secondary);
+}
+
+.legend-text strong {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   9. Financial Repayment Dashboard
+   ========================================================================== */
+.loan-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Primary monthly card */
+.repayment-card {
+    background: var(--summary-card-bg);
+    border: var(--summary-card-border);
+    padding: 16px 20px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+
+body.light-theme .repayment-card {
+    box-shadow: 0 10px 20px rgba(112,92,168,0.03);
+}
+
+.summary-icon {
+    font-size: 2.2rem;
+    color: var(--color-principal);
+    filter: drop-shadow(0 0 10px rgba(255, 46, 147, 0.4));
+}
+
+.summary-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.summary-label {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.summary-value {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--text-primary);
+}
+
+/* Sub detail columns */
+.summary-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.summary-sub-card {
+    background: var(--summary-card-bg);
+    border: var(--summary-card-border);
+    padding: 12px 16px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.summary-sub-label {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+}
+
+.summary-sub-value {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.color-accent-interest {
+    color: var(--color-interest);
+}
+
+/* ==========================================================================
+   10. Active Button Glow Illuminations
+   ========================================================================== */
+.calc-btn.active-glow {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border-color: #ffffff !important;
+    box-shadow: 0 0 20px #ffffff, 0 0 35px rgba(255, 255, 255, 0.6) !important;
+    transform: scale(0.92);
+    z-index: 5;
+}
+
+body.light-theme .calc-btn.active-glow {
+    background: #11111c !important;
+    color: #ffffff !important;
+    border-color: #11111c !important;
+    box-shadow: 0 0 20px #11111c, 0 0 35px rgba(17, 17, 28, 0.4) !important;
+}
+
+/* Custom Neon colors for glowing active operators and actions */
+.calc-btn.op-btn.active-glow {
+    background: var(--btn-op-text) !important;
+    color: #ffffff !important;
+    border-color: var(--btn-op-text) !important;
+    box-shadow: 0 0 22px var(--btn-op-text), 0 0 40px rgba(142, 74, 252, 0.75) !important;
+}
+
+.calc-btn.action-btn.active-glow {
+    background: var(--btn-action-text) !important;
+    color: #ffffff !important;
+    border-color: var(--btn-action-text) !important;
+    box-shadow: 0 0 22px var(--btn-action-text), 0 0 40px rgba(255, 46, 147, 0.75) !important;
+}
