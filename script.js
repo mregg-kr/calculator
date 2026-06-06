@@ -197,11 +197,11 @@ const initUIControls = () => {
         if (body.classList.contains('light-theme')) {
             body.classList.remove('light-theme');
             body.classList.add('dark-theme');
-            themeBtn.innerHTML = '<i class="ph ph-moon"></i>';
+            themeBtn.innerHTML = '<i class="ph ph-sun"></i>';
         } else {
             body.classList.remove('dark-theme');
             body.classList.add('light-theme');
-            themeBtn.innerHTML = '<i class="ph ph-sun"></i>';
+            themeBtn.innerHTML = '<i class="ph ph-moon"></i>';
         }
     });
 
